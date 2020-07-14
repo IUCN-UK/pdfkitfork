@@ -1,7 +1,7 @@
 class IMGKit
   class Configuration
     attr_writer :wkhtmltoimage
-    attr_accessor :meta_tag_prefix, :default_options, :default_format
+    attr_accessor :meta_tag_prefix, :default_options, :default_format, :timeout
 
     def initialize
       @meta_tag_prefix = 'imgkit-'

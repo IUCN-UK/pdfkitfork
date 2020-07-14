@@ -329,4 +329,17 @@ describe IMGKit do
       File.exist?(@test_path).should be_false
     end
   end
+
+  context "timeout" do
+    it "will kill wkhtmltopdf when it becomes stuck" do
+      IMGKit.configure do |config|
+        config.timeout = 2
+      end
+      imgkit = IMGKit.new("<html><script>for (;;) {}</script></html>")
+      expect { imgkit.to_img }.to raise_error(/timeout/)
+      IMGKit.configure do |config|
+        config.timeout = nil
+      end
+    end
+  end
 end

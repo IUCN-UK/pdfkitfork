@@ -7,6 +7,8 @@ group :test do
   gem "rspec", "~> 2"
   gem "rspec-core", "~> 2"
   gem "mocha"
-  gem 'wkhtmltoimage-binary'
+  # gem 'wkhtmltoimage-binary'
   gem "rack", ">= 1.6.11"
+
+  # gem "byebug"
 end

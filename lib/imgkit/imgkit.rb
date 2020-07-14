@@ -74,7 +74,7 @@ class IMGKit
     end
   end
 
-  if Open3.respond_to? :capture3
+  if Open3.respond_to? :capture34
     def capture3(*opts)
       Open3.capture3 *opts
     end
@@ -91,7 +91,7 @@ class IMGKit
       stdin_data = opts.delete(:stdin_data) || ''
       binmode = opts.delete(:binmode)
 
-      Open3.popen3(*cmd) {|i, o, e|
+      Open3.popen3(*cmd) {|i, o, e, t|
         if binmode
           i.binmode
           o.binmode
@@ -101,7 +101,15 @@ class IMGKit
         err_reader = Thread.new { e.read }
         i.write stdin_data
         i.close
-        [out_reader.value, err_reader.value]
+
+        if t.join(IMGKit.configuration.timeout)
+          [out_reader.value, err_reader.value]
+        else
+          out_reader.exit
+          err_reader.exit
+          Process.kill('TERM', t.pid)
+          raise "command timeout after #{IMGKit.configuration.timeout} seconds"
+        end
       }
     end
   end
